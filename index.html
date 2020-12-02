@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- НАЧАЛО КОДА ПРОГРАММЫ -->
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="style.css"/>
+    <script>
+      function mod(a, b) { // в Javascript нет встроенной функции
+                           // деления с остатком поэтому пришлось написать свою
+        let m = a % b;     // m остаток от деления а на b
+        if (m < 0) {       // если m меньше 0 то 
+          m = (b < 0) ? m - b : m + b; // m = m - b, если b меньше 0
+                                       // или m = m + b, если b больше 0
+        }
+        return m;          // вернуть остаток от деления
+      }
+
+      function crypt() {
+        // забрать информацию из формы
+        const ascii = 'abcdefghijklmnopqrstuvwxyz'; // английский алфавит
+        const $message = document.getElementById("message"); // получить доступ к html элементу в котором записывается оригинальное послание
+        const $crypted = document.getElementById("crypted"); // получить доступ к html элементу в котором записывается зашифрованное послание
+        let shift = parseInt(document.getElementById("shift").value); // получить доступ к html элементу в котором записывается свдиг 
+                                                                      // а также перевести значение из строки в число
+        let isBackwards = document.getElementById('directionChoice').matches(":checked"); // получить доступ к элементу который отвечает
+                                                                                          // за направление сдвига
+         
+        shift = isBackwards ? 0-shift : shift; // сделать К отрицательным если сдвиг влево иначе оставить положительным
+        
+        let crypted = ''; // строка с зашифрованным посланием
+        $message.value.split('').forEach((el) => {            // создать из строки с посланием массив который содержит по одной букве в элементе
+                                                              // и для каждого элемента в массиве применить фукнцию переданную в forEach()
+            let index = mod((ascii.indexOf(el) + shift), 26); // индекс буквы в английском алфавите + сдвиг поделить с остатком на 26
+            crypted+=ascii[index];                            // добавить в строку букву со сдвинутым индексом
+        });
+
+        $crypted.value = crypted; // отправить зашифрованную строку в форму
+      }
+    </script>
+  </head>
+  <!-- КОНЕЦ КОДА ПРОГРАММЫ -->
+  <!-- НАЧАЛО ВЁРСТКИ ПРОГРАММЫ-->
+  <body>
+    <main>
+      <form>
+        <div>
+          <h1>Caesar cypher</h1>
+          <input type="text" id="message" class="text" placeholder="message">
+          <input type="text" id="crypted" class="text" placeholder="crypted message">
+          <input type="text" id='shift' class='text' placeholder="shift K">
+          <p>Backwards?</p>
+          <div>
+            <input type="checkbox" id="directionChoice"
+             name="contact" value="true">
+            <label for="directionChoice1">Yes</label>
+          </div>
+          <input value="Encrypt" onclick="crypt()" type="button" class="button">
+          
+        </div>
+        
+       </form>
+    </main>
+  </body>
+</html>
